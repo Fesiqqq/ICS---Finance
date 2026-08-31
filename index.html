@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICS Finance - Controle Inteligente</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+    <canvas id="confettiCanvas"></canvas>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h1>ICS <span>Finance</span></h1>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" id="paletteToggle" title="Escolher paleta de cores">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/>
+                        <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C21.998 6.648 17.508 2 12 2z"/>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="themeToggle" title="Alternar tema">
+                    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="exportBtn" title="Exportar CSV">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="palette-panel hidden" id="palettePanel">
+            <div class="palette-group">
+                <h4>Tons Quentes</h4>
+                <div class="palette-grid">
+                    <button class="palette-option warm-sunset" data-palette="sunset" title="Sol & Pôr do Sol">
+                        <span class="palette-swatch"><i></i><i></i><i></i></span>
+                        <span class="palette-name">Sol &amp; Pôr do Sol</span>
+                    </button>
+                    <button class="palette-option warm-amber" data-palette="amber" title="Âmbar & Cobre">
+                        <span class="palette-swatch"><i></i><i></i><i></i></span>
+                        <span class="palette-name">Âmbar &amp; Cobre</span>
+                    </button>
+                </div>
+            </div>
+            <div class="palette-group">
+                <h4>Tons Frios</h4>
+                <div class="palette-grid">
+                    <button class="palette-option cool-ocean" data-palette="ocean" title="Azul Oceano">
+                        <span class="palette-swatch"><i></i><i></i><i></i></span>
+                        <span class="palette-name">Azul Oceano</span>
+                    </button>
+                    <button class="palette-option cool-emerald" data-palette="emerald" title="Esmeralda">
+                        <span class="palette-swatch"><i></i><i></i><i></i></span>
+                        <span class="palette-name">Esmeralda</span>
+                    </button>
+                    <button class="palette-option cool-pacific" data-palette="pacific" title="Pacífico">
+                        <span class="palette-swatch"><i></i><i></i><i></i></span>
+                        <span class="palette-name">Pacífico</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="motivational-banner" id="motivationalBanner">
+            <span class="banner-icon">&#x1F4A1;</span>
+            <p id="motivationalText">Comece a registrar suas transacoes!</p>
+        </div>
+
+        <section class="summary">
+            <div class="summary-card income" data-animate>
+                <div class="card-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+                    </svg>
+                </div>
+                <h3>Entradas</h3>
+                <p id="totalIncome">R$ 0,00</p>
+                <span class="card-count" id="incomeCount">0 transacoes</span>
+            </div>
+            <div class="summary-card expense" data-animate>
+                <div class="card-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/>
+                    </svg>
+                </div>
+                <h3>Saidas</h3>
+                <p id="totalExpense">R$ 0,00</p>
+                <span class="card-count" id="expenseCount">0 transacoes</span>
+            </div>
+            <div class="summary-card balance" data-animate>
+                <div class="card-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <h3>Saldo</h3>
+                <p id="totalBalance">R$ 0,00</p>
+                <span class="card-count" id="balancePercent">0% do total</span>
+            </div>
+        </section>
+
+        <div class="two-col">
+            <section class="form-section glass">
+                <h2 id="formTitle">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Nova Transacao
+                </h2>
+                <form id="transactionForm">
+                    <input type="hidden" id="editId" value="">
+                    <div class="form-group">
+                        <label for="description">Descricao</label>
+                        <input type="text" id="description" placeholder="Ex: Salario, Almoco..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Valor (R$)</label>
+                        <input type="number" id="amount" step="0.01" min="0.01" placeholder="0,00" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="type">Tipo</label>
+                            <select id="type" required>
+                                <option value="income">📈 Entrada</option>
+                                <option value="expense">📉 Saida</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Categoria</label>
+                            <select id="category" required>
+                                <option value="salary">💰 Salario</option>
+                                <option value="food">🍔 Alimentacao</option>
+                                <option value="transport">🚗 Transporte</option>
+                                <option value="health">🏥 Saude</option>
+                                <option value="leisure">🎮 Lazer</option>
+                                <option value="education">📚 Educacao</option>
+                                <option value="bills">📄 Contas</option>
+                                <option value="shopping">🛍️ Compras</option>
+                                <option value="investment">📈 Investimento</option>
+                                <option value="other">✨ Outro</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit" id="submitBtn" class="btn-primary">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Adicionar
+                        </button>
+                        <button type="button" id="cancelBtn" class="btn-secondary hidden">Cancelar</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="goals-section glass">
+                <h2>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+                    </svg>
+                    Media de Gastos
+                </h2>
+                <div class="goal-input-group">
+                    <input type="number" id="monthlyGoal" placeholder="Defina seu limite (R$)" min="0" step="0.01">
+                    <button id="setGoalBtn" class="btn-small">Definir</button>
+                </div>
+                <div class="goal-display" id="goalDisplay">
+                    <div class="goal-bar-container">
+                        <div class="goal-bar" id="goalBar"></div>
+                    </div>
+                    <div class="goal-info">
+                        <span id="goalSpent">R$ 0,00 gasto</span>
+                        <span id="goalRemaining">R$ 0,00 restante</span>
+                    </div>
+                    <p class="goal-message" id="goalMessage"></p>
+                </div>
+
+                <h2 style="margin-top: 25px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                    Investimento
+                </h2>
+                <div class="goal-input-group">
+                    <input type="number" id="investmentGoal" placeholder="Meta mensal investimento (R$)" min="0" step="0.01">
+                    <button id="setInvestmentBtn" class="btn-small btn-investment">Definir</button>
+                </div>
+                <div class="investment-display" id="investmentDisplay">
+                    <div class="goal-bar-container">
+                        <div class="goal-bar investment-bar" id="investmentBar"></div>
+                    </div>
+                    <div class="goal-info">
+                        <span id="investedAmount">R$ 0,00 investido</span>
+                        <span id="investmentRemaining">R$ 0,00 restante</span>
+                    </div>
+                    <div class="investment-stats">
+                        <div class="invest-stat">
+                            <span class="invest-stat-label">% da Meta</span>
+                            <span class="invest-stat-value" id="investmentPercent">0%</span>
+                        </div>
+                        <div class="invest-stat">
+                            <span class="invest-stat-label">Total Investido</span>
+                            <span class="invest-stat-value" id="investmentTotal">R$ 0,00</span>
+                        </div>
+                        <div class="invest-stat">
+                            <span class="invest-stat-label">Transacoes</span>
+                            <span class="invest-stat-value" id="investmentCount">0</span>
+                        </div>
+                    </div>
+                    <p class="goal-message" id="investmentMessage"></p>
+                </div>
+
+                <h2 style="margin-top: 25px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
+                    </svg>
+                    Estatisticas
+                </h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">Maior gasto</span>
+                        <span class="stat-value" id="biggestExpense">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Gasto medio/dia</span>
+                        <span class="stat-value" id="avgDaily">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Total transacoes</span>
+                        <span class="stat-value" id="totalTransactions">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Dias registrados</span>
+                        <span class="stat-value" id="daysTracked">0</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section class="charts-row glass">
+            <div class="chart-col">
+                <h2>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                    Gastos por Categoria
+                </h2>
+                <canvas id="categoryChart" height="200"></canvas>
+            </div>
+            <div class="chart-col">
+                <h2>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/>
+                    </svg>
+                    Distribuicao de Gastos
+                </h2>
+                <div class="donut-wrapper">
+                    <canvas id="donutChart" width="220" height="220"></canvas>
+                    <div class="donut-legend" id="donutLegend"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="transactions-section glass">
+            <div class="transactions-header">
+                <h2>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                    Transacoes
+                </h2>
+                <div class="transactions-controls">
+                    <div class="search-box">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input type="text" id="searchInput" placeholder="Buscar...">
+                    </div>
+                    <select id="filterType">
+                        <option value="all">Todos</option>
+                        <option value="income">Entradas</option>
+                        <option value="expense">Saidas</option>
+                    </select>
+                    <select id="filterCategory">
+                        <option value="all">Todas categorias</option>
+                        <option value="salary">💰 Salario</option>
+                        <option value="food">🍔 Alimentacao</option>
+                        <option value="transport">🚗 Transporte</option>
+                        <option value="health">🏥 Saude</option>
+                        <option value="leisure">🎮 Lazer</option>
+                        <option value="education">📚 Educacao</option>
+                        <option value="bills">📄 Contas</option>
+                        <option value="shopping">🛍️ Compras</option>
+                        <option value="investment">📈 Investimento</option>
+                        <option value="other">✨ Outro</option>
+                    </select>
+                    <select id="sortBy">
+                        <option value="date-desc">Mais recente</option>
+                        <option value="date-asc">Mais antigo</option>
+                        <option value="amount-desc">Maior valor</option>
+                        <option value="amount-asc">Menor valor</option>
+                    </select>
+                </div>
+            </div>
+            <ul id="transactionList"></ul>
+            <p id="emptyMessage">Nenhuma transacao registrada. Comece adicionando uma acima!</p>
+        </section>
+
+        <footer class="footer">
+            <p>ICS Finance &mdash; Siqueira, Caua &amp; Igor</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

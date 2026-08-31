@@ -187,6 +187,20 @@ body {
     transition: var(--transition);
 }
 
+/* Padroniza a fonte em todos os elementos (botões, selects, options, painéis, etc.) */
+button,
+select,
+input,
+textarea,
+option,
+h1, h2, h3, h4, p, span,
+.palette-option,
+.legend-item,
+.stat-value,
+.invest-stat-value {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
 ::-webkit-scrollbar {
     width: 8px;
 }

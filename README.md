@@ -164,12 +164,6 @@ Usadas em todos os callbacks, deixando o código conciso e legível — como nos
 
 ---
 
-## 🎨 Protótipo (Figma)
-
-Sempre que possível, a ideia e o fluxo da aplicação foram organizados em um protótipo no Figma antes da implementação, definindo as decisões de **UX/UI** (layout dos cards, posição dos gráficos, fluxo de cadastro).
-
----
-
 ## 🛠️ Tecnologias
 
 - **HTML5** — estrutura semântica
